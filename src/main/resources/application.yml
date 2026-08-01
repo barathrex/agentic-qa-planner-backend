@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: qa-planning-assistant
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.ascidgwzfjcwcmzkuxam.supabase.co:5432/postgres?sslmode=require}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:YOUR_SUPABASE_PASSWORD_HERE}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  ai:
+    openai:
+      api-key: ${GEMINI_API_KEY:${OPENAI_API_KEY:YOUR_GEMINI_API_KEY_HERE}}
+      base-url: ${AI_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai/}
+      chat:
+        options:
+          model: ${AI_MODEL:gemini-1.5-flash}
+          temperature: 0.3
+
+server:
+  port: ${PORT:8080}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000,https://agentic-qa-planner-frontend.vercel.app}
+  knowledge-base:
+    path: classpath:knowledge-base/
+  rag:
+    top-k: 5
+
