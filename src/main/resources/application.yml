@@ -22,9 +22,6 @@ spring:
         options:
           model: ${AI_MODEL:gemini-1.5-flash}
           temperature: 0.3
-      embedding:
-        options:
-          model: ${EMBEDDING_MODEL:text-embedding-004}
 
 server:
   port: ${PORT:8080}
