@@ -32,7 +32,6 @@ public class VectorStoreConfig {
                 return Optional.of(removed);
             }
 
-            @Override
             public Optional<Boolean> delete(Filter.Expression filterExpression) {
                 return Optional.of(false);
             }
