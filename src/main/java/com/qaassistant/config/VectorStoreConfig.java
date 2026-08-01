@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -26,12 +27,14 @@ public class VectorStoreConfig {
             }
 
             @Override
-            public void delete(List<String> idList) {
-                documents.removeIf(doc -> idList.contains(doc.getId()));
+            public Optional<Boolean> delete(List<String> idList) {
+                boolean removed = documents.removeIf(doc -> idList.contains(doc.getId()));
+                return Optional.of(removed);
             }
 
             @Override
-            public void delete(Filter.Expression filterExpression) {
+            public Optional<Boolean> delete(Filter.Expression filterExpression) {
+                return Optional.of(false);
             }
 
             @Override
