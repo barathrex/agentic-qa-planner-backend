@@ -39,7 +39,7 @@ The backend is a **Spring Boot 3 REST API** that:
 ```
 1. Developer opens https://agenticqa.barathraj.in (Vercel frontend)
 2. Developer enters name + password → POST /api/auth/login
-3. Backend validates against in-memory DEVELOPERS map (Barath/Rishabh/Whiskey)
+3. Backend validates against in-memory DEVELOPERS map 
 4. Backend generates a signed HMAC-SHA256 JWT (24hr expiry) and returns it
 5. Frontend stores JWT in localStorage → attaches as "Authorization: Bearer <token>" to all API calls
 
