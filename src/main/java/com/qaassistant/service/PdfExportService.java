@@ -76,7 +76,7 @@ public class PdfExportService {
             document.add(new Paragraph(" ", bodyFont));
 
             int totalAc = plan.getAcceptanceCriteria() != null ? plan.getAcceptanceCriteria().size() : 0;
-            long coveredAc = plan.getAcceptanceCriteria() != null ? plan.getAcceptanceCriteria().stream().filter(AcceptanceCriteriaDto::isCovered).count() : 0;
+            long coveredAc = plan.getAcceptanceCriteria() != null ? plan.getAcceptanceCriteria().stream().filter(ac -> Boolean.TRUE.equals(ac.getCovered())).count() : 0;
             document.add(new Paragraph("Covered: " + coveredAc + " / " + totalAc + " | Coverage: " + (plan.getCoveragePercentage() != null ? plan.getCoveragePercentage().intValue() : 100) + "%", boldFont));
             document.add(new Paragraph(" ", bodyFont));
 
@@ -93,8 +93,9 @@ public class PdfExportService {
                 for (AcceptanceCriteriaDto ac : plan.getAcceptanceCriteria()) {
                     acTable.addCell(new PdfPCell(new Phrase("AC" + ac.getCriteriaIndex(), bodyFont)));
                     acTable.addCell(new PdfPCell(new Phrase(ac.getDescription(), bodyFont)));
-                    String status = ac.isCovered() ? "✓ Covered" : "✗ Uncovered";
-                    Font statusFont = ac.isCovered() ? FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, new Color(16, 185, 129)) : FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, new Color(239, 68, 68));
+                    boolean isCov = Boolean.TRUE.equals(ac.getCovered());
+                    String status = isCov ? "✓ Covered" : "✗ Uncovered";
+                    Font statusFont = isCov ? FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, new Color(16, 185, 129)) : FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, new Color(239, 68, 68));
                     acTable.addCell(new PdfPCell(new Phrase(status, statusFont)));
                 }
             }
