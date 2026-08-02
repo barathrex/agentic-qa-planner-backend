@@ -22,7 +22,8 @@ public class QaAiService {
             CRITICAL RULES:
             - NEVER state that a feature has passed QA, is approved, or is ready for release.
             - NEVER make final quality judgments. Only propose test cases.
-            - Generate only RELEVANT test categories based on the feature.
+            - Generate userFlows, testCases, edgeCases, permissionCases, failureStates, regressionAreas, and assumptions.
+            - Provide clear section headers and titles for all scenario categories (Edge Cases, Permission Cases, Failure States, Regression Areas).
             - Every test case MUST include: testId, title, category, preconditions, steps, expectedResult, priority (HIGH/MEDIUM/LOW), reason, mappedAcceptanceCriteria (1-based indices).
             - Map each test case to one or more acceptance criteria by index (AC1 = index 1, AC2 = index 2, etc.).
             - Identify main user flows as a list of flow step descriptions.

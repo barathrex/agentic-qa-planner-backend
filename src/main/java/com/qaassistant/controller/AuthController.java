@@ -21,7 +21,8 @@ public class AuthController {
     // Allowed developer credentials
     private static final Map<String, String> DEVELOPERS = Map.of(
             "Barath", "Test@123",
-            "Rishabh", "Test@123"
+            "Rishabh", "Test@123",
+            "Whiskey", "Test@123"
     );
 
     @Data
