@@ -10,6 +10,9 @@ import java.util.List;
 @Builder
 public class QaPlanResponse {
     private Long id;
+    private String developerName;
+    private String title;
+    private String description;
     private String requirement;
     private String implementationSummary;
     private List<String> userFlows;

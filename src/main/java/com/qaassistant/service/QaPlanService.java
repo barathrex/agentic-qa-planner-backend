@@ -37,7 +37,7 @@ public class QaPlanService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public QaPlanResponse generate(GenerateQaPlanRequest request) {
+    public QaPlanResponse generate(GenerateQaPlanRequest request, String developerName) {
         String guidance = knowledgeBaseService.retrieveRelevantGuidance(
                 request.getRequirement(),
                 request.getImplementationSummary()
@@ -51,6 +51,9 @@ public class QaPlanService {
         );
 
         QaPlan plan = QaPlan.builder()
+                .developerName(developerName != null ? developerName : request.getDeveloperName())
+                .title(request.getTitle())
+                .description(request.getDescription())
                 .requirement(request.getRequirement())
                 .implementationSummary(request.getImplementationSummary())
                 .userFlows(serializeList(aiPlan.getUserFlows()))
@@ -101,6 +104,26 @@ public class QaPlanService {
         qaPlanRepository.save(plan);
 
         return toResponse(plan);
+    }
+
+    @Transactional(readOnly = true)
+    public List<QaPlanResponse> getPlansByDeveloper(String developerName, String searchQuery) {
+        List<QaPlan> plans;
+        if (searchQuery != null && !searchQuery.isBlank()) {
+            plans = qaPlanRepository.searchDeveloperPlans(developerName, searchQuery.trim());
+        } else {
+            plans = qaPlanRepository.findByDeveloperNameOrderByCreatedDateDesc(developerName);
+        }
+        return plans.stream().map(this::toResponse).toList();
+    }
+
+    @Transactional
+    public void deletePlan(Long id, String developerName) {
+        QaPlan plan = findPlan(id);
+        if (developerName != null && !developerName.equalsIgnoreCase(plan.getDeveloperName())) {
+            throw new IllegalArgumentException("Cannot delete plan owned by another developer");
+        }
+        qaPlanRepository.delete(plan);
     }
 
     @Transactional
@@ -305,6 +328,9 @@ public class QaPlanService {
 
         return QaPlanResponse.builder()
                 .id(plan.getId())
+                .developerName(plan.getDeveloperName())
+                .title(plan.getTitle())
+                .description(plan.getDescription())
                 .requirement(plan.getRequirement())
                 .implementationSummary(plan.getImplementationSummary())
                 .userFlows(deserializeList(plan.getUserFlows()))

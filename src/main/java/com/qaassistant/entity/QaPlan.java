@@ -22,6 +22,15 @@ public class QaPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "developer_name")
+    private String developerName;
+
+    @Column
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String requirement;
 
