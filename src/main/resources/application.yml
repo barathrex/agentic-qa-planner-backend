@@ -2,10 +2,24 @@ spring:
   application:
     name: qa-planning-assistant
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.ascidgwzfjcwcmzkuxam.supabase.co:5432/postgres?sslmode=require}
+    # Append prepareThreshold=0 to disable server-side prepared statements.
+    # This is required when using Supabase/PgBouncer in transaction pooling mode,
+    # as prepared statements are connection-scoped and cause conflicts across pool reuse.
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.ascidgwzfjcwcmzkuxam.supabase.co:5432/postgres?sslmode=require&prepareThreshold=0}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:YOUR_SUPABASE_PASSWORD_HERE}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      # Keep the pool small to avoid overwhelming Supabase's connection limit
+      maximum-pool-size: 5
+      minimum-idle: 2
+      # Validate connections before handing them out to detect stale/broken ones
+      connection-test-query: SELECT 1
+      connection-timeout: 20000
+      # Recycle connections after 10 minutes to prevent PgBouncer stale state
+      max-lifetime: 600000
+      idle-timeout: 300000
+      keepalive-time: 60000
   jpa:
     hibernate:
       ddl-auto: update
