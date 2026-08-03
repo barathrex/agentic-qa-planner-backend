@@ -15,7 +15,7 @@
 - [ ] 403 for insufficient permissions
 - [ ] 404 for non-existent resources
 - [ ] 409 for conflict scenarios
-- [ ] 500 for server errors (with safe error messages)
+- [ ] 500 for server errors (with safe error messages).
 
 ## Authentication & Authorization
 
